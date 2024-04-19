@@ -1,0 +1,34 @@
+<%- include('./header.ejs') -%>
+    <!-- Login Register -->
+    <div class="container">
+        <div class="box d-flex align-items-center justify-content-center px-md-5 m-auto py-5">
+            <div class="card p-4">
+              <br><br>
+            <h2 class="text-center">FORGOT PASSWORD</h2>
+            <form action="/forgot" method="post" class="form-row">
+              
+
+                <label for="email" class="form-group">Email address</label>
+                <input type="email" name="email" placeholder="Type your registered email here" class="form-control border-dark" required>
+                <% if (messages.error) { %>
+                    <div class="alert alert-danger">
+                        <%= messages.error %>
+                    </div>
+                <% } %>
+                <div class="text-center py-4 w-100">
+                    <input type="submit" class="btn btn-outline-dark px-5 " >                    
+                </div>
+            </form>
+            <br><br><br>
+            
+        </div>
+        </div>
+    </div><br><br>
+    <!-- end login register -->
+  
+    <%- include('./footer.ejs') -%>
+  
+
+
+
+

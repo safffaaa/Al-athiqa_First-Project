@@ -1,0 +1,64 @@
+<%- include('./head') %>
+
+
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+<% } else if (messages.error) { %>
+    <div class="alert alert-danger">
+        <%= messages.error %>
+    </div>
+<% } %>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100" style="padding-bottom: 10%;">
+    <div class="shadow p-5 mt-5 bg-white rounded w-50 d-flex flex-column align-items-center justify-content-center">
+        <h1 class="use text-center mb-4">EDIT CATEGORY</h1>
+
+        <form method="post" action="/editcategory/<%=Category._id %>" class="pt-3 mx-auto" enctype="multipart/form-data" id="editCategoryForm">
+            <div class="form-group">
+                <label for="category">Category Name</label>
+                <input type="text" value="<%=Category.name %>" name="name" id="category" class="form-control" required>
+                <div id="categoryError" class="error small text-danger"></div>
+            </div>
+            <div class="form-group">
+                <label for="catimg">Category images</label>
+                <input type="file" name="catimg" id="catimg" class="form-control">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-4" id="submit">Submit</button>
+            </div>
+        </form>
+        <div id="formErrors" class="errors"></div>
+
+    </div>
+</div>
+
+<script>
+    document.getElementById('editCategoryForm').addEventListener('submit', function(event) {
+        const categoryInput = document.getElementById('category');
+        const categoryError = document.getElementById('categoryError');
+        const formErrors = document.getElementById('formErrors');
+        let isValid = true;
+
+        // Clear previous errors
+        categoryError.textContent = '';
+        formErrors.textContent = '';
+
+        // Validate category name
+        const categoryName = categoryInput.value.trim();
+        if (!categoryName.match(/^[a-zA-Z][a-zA-Z0-9\s]*$/)) {
+            categoryError.textContent = 'Category name must be a name.';
+            isValid = false;
+        }
+
+        // If form is not valid, prevent submission and display error
+        if (!isValid) {
+            event.preventDefault();
+            formErrors.textContent = 'Please fix the errors in the form.';
+        }
+    });
+
+</script>
+
+<%- include('./foot') %>

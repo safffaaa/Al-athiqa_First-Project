@@ -1,0 +1,236 @@
+<%- include('./header1') -%>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="bg-white rounded shadow-sm p-3">
+                <h3 class="fw-bold text-center">Order Details</h3>
+                <hr>
+                <div class="p-3 shadow-sm">
+                    <table class="table table-borderless">
+                        <% if (myOrder.paymentStatus === 'Payment Failed') { %>
+                            <div class="text-end mt-3">
+                                <button id="rzp-button1" class="btn btn-outline-danger">Retry payment</button>
+                            </div>
+                        <% } %>
+                        <tr>
+                            <th class="w-25">Customer & Address</th>
+                            <td>
+                                <% if (myOrder && myOrder.address) { %>
+                                    <strong><%= myOrder.address.name %></strong><br>
+                                    <%= myOrder.address.addressLane %><br>
+                                    <%= myOrder.address.city %>, <%= myOrder.address.state %> - <%= myOrder.address.pincode %><br>
+                                <% } else { %>
+                                    <strong>Address Not Available</strong>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Mobile</th>
+                            <td><%= myOrder.address.mobile %>,
+                                <%= myOrder.address.altMobile %></td>
+                        </tr>
+                        <tr>
+                            <th>Order ID</th>
+                            <td><%= myOrder.customOrderId %></td>
+                        </tr>
+                        <tr>
+                            <th>Order Date</th>
+                            <td style="color: green;"><%= new Date(myOrder.orderDate).toLocaleDateString() %></td>
+                        </tr>
+                        <tr>
+                            <th>Delivery On</th>
+                            <td style="color: red;"><%= new Date(myOrder.deliveryDate).toLocaleDateString() %></td>
+                        </tr>
+                        <tr>
+                            <th>Deliver Charge</th>
+                            <td style="font-weight: bold;">₹<%= myOrder.DeliveryCharge %></td>
+                        </tr>
+                        <tr>
+                            <th>Total Quantity</th>
+                            <td><%= myOrder.totalQuantity %> No.</td>
+                        </tr>
+                        <tr>
+                            <th>Total Amount</th>
+                            <td style="font-weight: bold;color: green;">Rs ₹<%= myOrder.totalAmount %>/-</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Method</th>
+                            <td><%= myOrder.paymentMethod %></td>
+                        </tr>
+                        <tr>
+                            <th>Payment Status</th>
+                            <td><%= myOrder.paymentStatus %></td>
+                        </tr>
+                        <tr>
+                            <th>Order Status</th>
+                            <td><%= myOrder.status %></td>
+                        </tr>
+                        <tr>
+                            <th>Products</th>
+                            <td>
+                             
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Image</th>
+                                        <th>Action</th>
+                                        <th>Status</th>
+                                    </tr>
+                                   
+                                    <% myOrder.items.forEach((item) => { %>
+                                        <% if (item.status === 'Cancelled') { %>
+                                            <tr class="text-danger">
+                                                <td><%= item.productId.name %></td>
+                                                <td><%= item.quantity %></td>
+                                                <td>
+                                                    <% if (item.productId.images && item.productId.images.length > 0) { %>
+                                                        <img src="/uploads/<%= item.productId.images[0] %>" alt="Product Image" style="width: auto; height: 70px;">
+                                                    <% } else { %>
+                                                        <span>No Image Available</span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <!-- Cancelled item -->
+                                                    <span class="fw-bold">Cancelled</span>
+                                                </td>
+                                            </tr>
+                                        <% } else { %>
+                                            <tr>
+                                                <td><%= item.productId.name %></td>
+                                                <td><%= item.quantity %></td>
+                                                <td>
+                                                    <% if (item.productId.images && item.productId.images.length > 0) { %>
+                                                        <img src="/uploads/<%= item.productId.images[0] %>" alt="Product Image" style="width: auto; height: 70px;">
+                                                    <% } else { %>
+                                                        <span>No Image Available</span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if ( myOrder.items.length <= 1) { %>
+                                                        <td>No action available</td>
+                                                    <% } else { %>
+                                                        <% if (myOrder.status === 'Delivered' && item.status !== 'Return Accept') { %>
+                                                            <a href="/returnItems/<%=  myOrder._id %>/<%= item.productId._id %>" class="btn btn-outline-danger">Return Item</a>
+                                                        <% } else { %>
+                                                            <button class="btn btn-outline-danger" disabled>Return Item</button>
+                                                        <% } %>
+                                                    <% } %>
+                                                </td>
+                                                <td><%= item.status %></td>
+                                            </tr>
+                                        <% } %>
+                                    <% }); %>
+                                  
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <% if (myOrder.status==='Delivered' ) { %>
+                                <td colspan="2"><a href="/returnOrder/<%= myOrder._id %>" class="btn btn-outline-danger">Return</a></td>
+                            <% } else if (myOrder.status==='Cancelled' ) { %>
+                                <td colspan="2" class="text-danger fw-bold">Cancelled</td>
+                            <% } else if (myOrder.status==='Return Pending' || myOrder.status==='Returned' ) { %>
+                                <td colspan="2"><button disabled class="btn btn-outline-danger">Return</button></td>
+                            <% } else { %>
+                                <td colspan="2"><a href="/cancelOrder/<%= myOrder._id %>" class="btn btn-outline-secondary">Cancel</a>
+                                </td>
+                            <% } %>
+                        </tr>
+                    </table>
+                    
+                    <% if (myOrder.paymentStatus === "Paid") { %>
+                        <div class="text-center">
+                            <a href="/downloadInvoice/<%= myOrder._id %>" class="btn btn-outline-secondary">Download Invoice</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    document.getElementById('rzp-button1').onclick = function() {
+        fetch('/repay', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                orderId: '<%= myOrder._id %>'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            var options = {
+                key: 'rzp_test_CMXKo79M6lqVba',
+                amount: data.order.amount + 40, 
+                currency: data.currency,
+                name: 'Al Athiqa',
+                description: 'Test Payment',
+                order_id: data.order_id,
+                handler: function(response) {
+                    verifyPayment(response);
+                },
+                prefill: {
+                    name: data.user.name,
+                    email: data.user.email
+                },
+                theme: {
+                    color: '#3399cc'
+                }
+            };
+
+            var rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response){
+                window.alert("Payment Again Failed")
+            });
+            rzp.open();
+        })
+        .catch(error => console.error('Error:', error));
+    };
+
+    function verifyPayment(payment) {
+        $.ajax({
+            url: '/verify_Payment',
+            data: {
+                payment,
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.success) {
+                    payment_success();
+                    console.log('response got')
+                } else {
+                    console.log('response not get');
+                    location.href = ''
+                }
+            },
+        })
+    }
+
+    function payment_success() {
+        console.log("payment success");
+
+        $.ajax({
+            url: '/repay_success',
+            method: 'POST',
+            data: {
+                orderId: '<%= myOrder._id %>',
+            },
+            success: function (response) {
+                location.reload()
+                console.log(response);
+            }
+        });
+    }
+
+
+
+</script>

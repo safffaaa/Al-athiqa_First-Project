@@ -1,0 +1,42 @@
+<%- include('./header.ejs') -%>
+
+<div class="container-fluid bg-light d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-12">
+        <div class="bg-white rounded shadow-lg p-3">
+          <h3 class="fw-bold text-center">Sign In</h3>
+          <hr>
+          <% if (typeof error !== 'undefined') { %>
+            <div class="alert alert-danger text-center" role="alert">
+              <%= error %>
+            </div>
+          <% } %>
+          <form method="post" action="/signin" class="pt-3 mx-auto">
+            <div class="form-group">
+              <input type="email" name="email" id="email" value="jebinrumaisa@gmail.com" class="form-control" required>
+              <label for="email">Email</label>
+            </div>
+
+            <div class="form-group">
+              <input type="password" name="password" id="password" value="Password" class="form-control" required>
+              <label for="password">Password</label>
+            </div>
+
+            <a href="/forgot" class="">Forgot Password</a>
+            <div class="form-group text-center">
+              <input type="submit" value="Sign In" class="btn btn-dark px-5">
+            </div>
+            <!-- <div class="text-center">
+              <a href="{% provider_login_url 'google' %}" class="m-3 text-decoration-none text-dark fs-4 fa-brands fa-google"></a>
+            </div> -->
+          </form>
+          <p class="text-center text-secondary">Don't Have an Account? <a href="/signup" class="text-info">Sign up</a> Now</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('./footer.ejs') -%>

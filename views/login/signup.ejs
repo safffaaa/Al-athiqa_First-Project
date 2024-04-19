@@ -1,0 +1,109 @@
+<%- include('./header.ejs') -%>
+
+<div class="container-fluid bg-light d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-12">
+        <div class="bg-white rounded shadow-lg p-3">
+          <h3 class="fw-bold text-center">Sign Up </h3>
+          <hr>
+          <% if (typeof error !== 'undefined') { %>
+            <div class="alert alert-danger text-center" role="alert">
+                <%= error %>  
+            </div>
+          <% } %>
+          <form method="post" action="/signup" class="pt-3 mx-auto" id="signupForm">
+              <div class="form-group">
+                  <input type="text" name="name" id="name" class="form-control" required>
+                  <label for="name">Username</label>
+                  <div id="nameError" class="error text-danger small"></div>
+              </div>
+          
+              <div class="form-group">
+                  <input type="email" name="email" id="email" class="form-control" required>
+                  <label for="email">Email</label>
+                  <div id="emailError" class="error text-danger small"></div>
+              </div>
+          
+              <div class="form-group">
+                  <input type="password" name="password" id="password" class="form-control" required>
+                  <label for="password">Password</label>
+                  <div id="passwordError" class="error text-danger small"></div>
+              </div>
+          
+              <div class="form-group">
+                  <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" required>
+                  <label for="confirmPassword">Confirm Password</label>
+                  <div id="confirmPasswordError" class="error text-danger small"></div>
+              </div>
+          
+              <div class="form-group text-center">
+                  <input type="submit" value="Sign Up" class="btn btn-dark px-5">
+              </div>
+          </form>
+          <div id="formErrors" class="errors"></div>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('signupForm').addEventListener('submit', function(event) {
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+    const formErrors = document.getElementById('formErrors');
+    let isValid = true;
+
+    // Clear previous errors
+    nameError.textContent = '';
+    emailError.textContent = '';
+    passwordError.textContent = '';
+    confirmPasswordError.textContent = '';
+    formErrors.textContent = '';
+
+    // Validate name
+    const name = nameInput.value.trim();
+    if (!name.match(/^[a-zA-Z][a-zA-Z0-9]*$/)) {
+        nameError.textContent = 'Name must start with a letter and cannot contain spaces.';
+        isValid = false;
+    }
+
+    // Validate email
+    const email = emailInput.value.trim();
+    if (!email.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
+        emailError.textContent = 'Invalid email format.';
+        isValid = false;
+    }
+
+    // Validate password
+    const password = passwordInput.value.trim();
+    if (!password.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$%^&*!])[A-Za-z\d@#$%^&*!]{8,}$/)) {
+        passwordError.textContent = 'Password must contain at least 8 characters including one alphabet, one number, and one special character (@#$%^&*!).';
+        isValid = false;
+    }
+
+    // Validate confirm password
+    const confirmPassword = confirmPasswordInput.value.trim();
+    if (password !== confirmPassword) {
+        confirmPasswordError.textContent = 'Passwords do not match.';
+        isValid = false;
+    }
+
+    // If form is not valid, prevent submission and display error
+    if (!isValid) {
+        event.preventDefault();
+        formErrors.textContent = 'Please fix the errors in the form.';
+    }
+  });
+
+</script>
+
+<%- include('./footer.ejs') -%>

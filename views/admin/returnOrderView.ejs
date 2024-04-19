@@ -1,0 +1,130 @@
+<%- include('./head') %>
+
+<div class="row justify-content-center">
+    <div class="col-12 py-2">
+        <div class="bg-light rounded shadow-sm">
+            <h3 class="fw-bold text-center">Returned Order</h3>
+            <hr>
+            <div class="p-3 shadow-sm">
+                <table class="table table-borderless">
+                    <tr>
+                        <th class="w-25">Customer & Address</th>
+                        <td>
+                            <% if (myOrder && myOrder.address) { %>
+                                <strong><%= myOrder.address.name %></strong><br>
+                                <%= myOrder.address.addressLane %><br>
+                                <%= myOrder.address.city %>, <%= myOrder.address.state %> - <%= myOrder.address.pincode %><br>
+                            <% } else { %>
+                                <strong>Address Not Available</strong>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Mobile</th>
+                        <td><%= myOrder.address.mobile %>, <%= myOrder.address.altMobile %></td>
+                    </tr>
+                    <tr>
+                        <th>Order ID</th>
+                        <td>ORD_<%= myOrder._id %></td>
+                    </tr>
+                    <tr>
+                        <th>Order Date</th>
+                        <td><%= myOrder.orderDate %></td>
+                    </tr>
+                    
+                    <tr>
+                        <th>Total Quantity</th>
+                        <td><%= myOrder.totalQuantity %> No.</td>
+                    </tr>
+                    <tr>
+                        <th>Total Amount</th>
+                        <td>Rs <%= myOrder.totalAmount %>/-</td>
+                    </tr>
+                    <tr>
+                        <th>Payment Method</th>
+                        <td><%= myOrder.paymentMethod %></td>
+                    </tr>
+                    <tr>
+                        <th>Payment Status</th>
+                        <td><%= myOrder.paymentStatus %></td>
+                    </tr>
+                    <tr>
+                        <th>Order Status</th>
+                        <td>
+                            <% if (myOrder.status === 'Delivered') { %>
+                                <span class="text-success fw-bold"><%= myOrder.status %></span>
+                                <% } else if (myOrder.status === 'Cancelled') { %>
+                                <span class="text-danger fw-bold"><%= myOrder.status %></span>
+                            <% } else { %>
+                                <%= myOrder.status %>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Products</th>
+                        <td>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Image</th>
+                                    <th>Staus</th>
+                                </tr>
+                                <% myOrder.items.forEach(item => { %>
+                                    <tr>
+                                        <td><%= item.productId.name %></td>
+                                        <td><%= item.quantity %></td>
+                                        <td>
+                                            <% if (item.productId.images && item.productId.images.length > 0) { %>
+                                                <img src="/uploads/<%= item.productId.images[0] %>" alt="Product Image" style="width: auto; height: 70px;">
+                                            <% } else { %>
+                                                <span>No Image Available</span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <%= item.status %>
+                                            <% if (item.status === 'Return Requested') { %>
+                                                <form action="/updateOrder" method="post">
+                                                    <div class="">
+                                                        <input type="hidden" value="<%= myOrder._id %>" name="id">
+                                                        <select name="status" id="status" class="form-select">
+                                                            <option value="<%= item.status %>" selected disabled><%= item.status %></option>
+                                                            <option value="Return Accept">Return Accept</option>
+                                                            <option value="Return Reject">Return Reject</option>
+                                                        </select><br>
+                                                        <input type="submit" value="Update" class="btn btn-secondary mx-2">
+                                                    </div>
+                                                </form>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </table>
+                        </td>
+                    </tr>   
+                    <% if (myOrder.status !== 'Cancelled' && myOrder.status !== 'Delivered') { %>
+                        <tr>
+                            <td colspan="2">
+                                <% if (myOrder.status === 'Return Pending') { %>
+                                    <form action="/updateOrder" method="post">
+                                        <div class="d-flex w-75">
+                                            <input type="hidden" value="<%= myOrder._id %>" name="id">
+                                            <label for="status">Order Status: </label>
+                                            <select name="status" id="status" class="form-select mx-2">
+                                                <option value="Return Pending" selected disabled>Return Pending</option>
+                                                <option value="Return Accept">Return Accept</option>
+                                                <option value="Return Reject">Return Reject</option>
+                                            </select>
+                                            <input type="submit" value="Update" class="btn btn-secondary mx-2">
+                                        </div>
+                                    </form>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% } %>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

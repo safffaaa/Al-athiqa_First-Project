@@ -1,0 +1,100 @@
+<%- include('./header1') %>
+
+    <!-- ........................................................................................................... -->
+
+    
+  
+
+
+    <div class="row bg-light m-0">
+        <section class="col-2"
+            style="display: flex; flex-wrap: nowrap; height: -webkit-fill-available; min-height: 67vh; overflow-x: hidden; overflow-y: hidden;">
+            <div class="d-flex flex-column flex-shrink-0 p-3 bg-white" style="width: 240px;">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32">
+                        <use xlink:href="#bootstrap" />
+                    </svg>
+                        <span class="fs-4 fw-bold">Profile</span>
+                    </a>
+                    <hr>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a href="/" style="color: black;text-decoration: none;"><i class="fa-solid fa-house"></i> Home</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/address" style="color: black;text-decoration: none;"><i class="fa-solid fa-address-card"></i> Address</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/userPasswordChange" style="color: black;text-decoration: none;"><i class="fa-solid fa-key"></i> Change Password</a>
+                        </li>
+                        <li class="list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="16"
+                            viewBox="0 0 22 16" fill="none">
+                            <path
+                              d="M5 16C4.16667 16 3.45833 15.7083 2.875 15.125C2.29167 14.5417 2 13.8333 2 13H0V2C0 1.45 0.196 0.979333 0.588 0.588C0.979333 0.196 1.45 0 2 0H16V4H19L22 8V13H20C20 13.8333 19.7083 14.5417 19.125 15.125C18.5417 15.7083 17.8333 16 17 16C16.1667 16 15.4583 15.7083 14.875 15.125C14.2917 14.5417 14 13.8333 14 13H8C8 13.8333 7.70833 14.5417 7.125 15.125C6.54167 15.7083 5.83333 16 5 16ZM5 14C5.28333 14 5.521 13.904 5.713 13.712C5.90433 13.5207 6 13.2833 6 13C6 12.7167 5.90433 12.4793 5.713 12.288C5.521 12.096 5.28333 12 5 12C4.71667 12 4.479 12.096 4.287 12.288C4.09567 12.4793 4 12.7167 4 13C4 13.2833 4.09567 13.5207 4.287 13.712C4.479 13.904 4.71667 14 5 14ZM2 11H2.8C3.08333 10.7 3.40833 10.4583 3.775 10.275C4.14167 10.0917 4.55 10 5 10C5.45 10 5.85833 10.0917 6.225 10.275C6.59167 10.4583 6.91667 10.7 7.2 11H14V2H2V11ZM17 14C17.2833 14 17.5207 13.904 17.712 13.712C17.904 13.5207 18 13.2833 18 13C18 12.7167 17.904 12.4793 17.712 12.288C17.5207 12.096 17.2833 12 17 12C16.7167 12 16.4793 12.096 16.288 12.288C16.096 12.4793 16 12.7167 16 13C16 13.2833 16.096 13.5207 16.288 13.712C16.4793 13.904 16.7167 14 17 14ZM16 9H20.25L18 6H16V9Z"
+                              fill="black" />
+                          </svg><a href="/userOrder" style="color: black;text-decoration: none;"> Orders</a>
+                        </li>
+        
+                        <li class="list-group-item">
+                            <a href="/walletPage" style="color: black;text-decoration: none;"><i class="fa-solid fa-wallet"></i> Wallet</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#" style="color: black;text-decoration: none;"><i class="fa-solid fa-link"></i> Referrals</a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="col-10">
+                <!-- Change Password Form -->
+                <div class="box d-flex align-items-center justify-content-center px-md-5 m-auto py-5">
+                    <div class="card p-4" style="width: 50%">
+                        <h2 class="text-center">CHANGE PASSWORD</h2>
+                        <form action="/userPasswordChange" method="post" class="">
+                            <label for="password" class="form-group">Current Password</label>
+                            <input type="password" id="password1" name="password" class="form-control border-dark" required onchange="validatePassword1()">
+                            <p id="messagePwd1" class="text-danger"></p>
+                            <label for="new password" class="form-group">New Password</label>
+                            <input type="password" id="password" name="newpassword" class="form-control border-dark" required onchange="validatePassword()">
+                            <p id="messagePwd" class="text-danger"></p>
+                            <label for="confirmpassword" class="form-group">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmpassword" class="form-control border-dark" required onchange="checkPasswordMatch()">
+                            <p id="messagePwdMatch" class="text-danger"></p>
+                            <% if (messages.success) { %>
+                            <div class="alert alert-success">
+                                <%= messages.success %>
+                            </div>
+                            <% } else if (messages.error) { %>
+                            <div class="alert alert-danger">
+                                <%= messages.error %>
+                            </div>
+                            <% } %>
+
+                            <div class="d-flex justify-content-center py-4">
+                                <input type="Submit" class="btn btn-dark px-5">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- End Change Password Form -->
+            </div>
+        </div>
+    </div>
+    <!-- ................................................................................................................ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

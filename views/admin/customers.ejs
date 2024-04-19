@@ -1,0 +1,110 @@
+
+    <%- include('./head') %>
+    <div class="container">
+        <div class="row">
+            <div class="d-flex justify-content-between mt-3">
+             <h3 class="text-center ">CUSTOMERS</h3>
+               
+         </div>
+    </div>
+
+        <% if (users!=null) { %>
+
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-12 p-2 border border-dark rounded">
+                        <table class="table table-striped text-center" >
+                            <tr>
+                                <th class="bg-dark text-white">Customer Name</th>
+                                <th class="bg-dark text-white">Customer Email</th>
+                                <th class="bg-dark text-white">Status</th>
+                                <th class="bg-dark text-white" colspan="2">Actions</th>
+                                 </tr>
+                        
+                                <% users.forEach((user,index)=> { %>
+                                  <% if (user.status==='Active' ) { %>
+                                    <tr>
+                                <% } else if (user.status==='Blocked' ) { %>
+                                    <tr class="table-danger">
+                                <% } %>
+                          
+                                <td>
+                                    <%= user.name %>
+                                </td>
+                                <td>
+                                    <%= user.email %>
+                                </td>
+                                <td>
+                                    <form action="/blockUnblock/<%= user._id %>" method="post">
+                                    <% if (user.status === 'Active') { %>
+                                        <p class="text-success fw-bold"><%= user.status %></p>
+                                        <% } else if (user.status === 'Blocked') { %>
+                                        <p class="text-danger fw-bold"><%= user.status %></p>    
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (user.status === 'Active') { %>
+                                        <a href="/blockUnblock/<%=user._id%>"><button onclick="return confirm('Are you sure you want to  block the user')" class="btn btn-outline-danger " >Block</button></a>
+                                    <% } else if (user.status === 'Blocked') { %>
+                                        <a href="/blockUnblock/<%=user._id%>"><button onclick="return confirm('Are you sure you want to  unblock the user')" class="btn btn-outline-success">Unblock</button></a>
+                                    <% } %>
+                                    </form>
+                                  </td>  
+                            </tr>
+
+                            <% }) %>
+                                </tr>
+                        </table>
+                    </div>
+                </div>
+                <% if (users==0) { %>
+                    <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Customers Found</h3>    
+                    <% } %>    
+                        <% } %>      
+    
+            </div>       
+    </div>
+    <% if (users.length > 0) { %>
+        <div class="d-flex justify-content-between m-auto w-50 align-items-center mt-3">
+            <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+                <% if(currentPage === totalPages){%>
+                    <%=totalCount%>
+                      <%}else{%>
+                        <%= currentPage * perPage  %>
+                        <%}%>
+                          results from <%= totalCount %></p>
+                       <ul class="pagination">
+                     <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                 <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                 </li>
+                 <% } %>
+               </ul>
+             </div>
+          
+         <% } else { %>
+          <% } %>
+         
+          
+           
+
+<!-- <% if (users.length > 0) { %>
+    <div class="d-flex justify-content-between m-auto w-50 align-items-center mt-3">
+        <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+          <% if(currentPage === totalPages){%>
+            <%=totalCount%>
+            <%}else{%>
+               <%= currentPage * perPage  %>
+                  <%}%>
+                  results from <%= totalCount %></p>    
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+               <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+              <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+  <% } %> -->
+
+
+  <%- include('./foot') %>

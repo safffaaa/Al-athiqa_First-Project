@@ -1,0 +1,100 @@
+<%- include('./header1') -%>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="bg-white rounded shadow-sm p-3">
+                <h3 class="fw-bold text-center">Order Details</h3>
+                <hr>
+                <div class="p-3 shadow-sm">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th class="w-25">Customer & Address</th>
+                            <td>
+                                <% if (myOrder && myOrder.address) { %>
+                                    <strong><%= myOrder.address.name %></strong><br>
+                                    <%= myOrder.address.addressLane %><br>
+                                    <%= myOrder.address.city %>, <%= myOrder.address.state %> - <%= myOrder.address.pincode %><br>
+                                <% } else { %>
+                                    <strong>Address Not Available</strong>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Mobile</th>
+                            <td><%= myOrder.address.mobile %>, <%= myOrder.address.altMobile %></td>
+                        </tr>
+                        <tr>
+                            <th>Order ID</th>
+                            <td>ORD_<%= myOrder._id %></td>
+                        </tr>
+                        <tr>
+                            <th>Order Date</th>
+                            <td><%= myOrder.orderDate %></td>
+                        </tr>
+                        <tr>
+                            <th>Delivery On</th>
+                            <td><%= myOrder.deliveryDate %></td>
+                        </tr>
+                      
+                        <tr>
+                            <th>Total Quantity</th>
+                            <td><%= myOrder.totalQuantity %> No.</td>
+                        </tr>
+                        <tr>
+                            <th>Total Amount</th>
+                            <td>Rs <%= myOrder.totalAmount %>/-</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Method</th>
+                            <td><%= myOrder.paymentMethod %></td>
+                        </tr>
+                        <tr>
+                            <th>Payment Status</th>
+                            <td><%= myOrder.paymentStatus %></td>
+                        </tr>
+                        <tr>
+                            <th>Order Status</th>
+                            <td><%= myOrder.status %></td>
+                        </tr>
+                        <tr>
+                            <th>Products</th>
+                            <td>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Image</th>
+                                    </tr>
+                                    <% myOrder.items.forEach(item => { %>
+                                        <tr>
+                                            <td><%= item.productId.name %></td>
+                                            <td><%= item.quantity %></td>
+                                            <td>
+                                                <% if (item.productId.images && item.productId.images.length > 0) { %>
+                                                    <img src="/uploads/<%= item.productId.images[0] %>" alt="Product Image" style="width: auto; height: 70px;">
+                                                <% } else { %>
+                                                    <span>No Image Available</span>
+                                                <% } %>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </table>
+                            </td>
+                        </tr>   
+                        <tr>
+                           <td colspan="2">
+                            <form action="" method="post" class="w-50">
+                                <div class="form-group">
+                                    <label for="">Reason</label>
+                                    <textarea name="reason" class="form-control"></textarea>
+                                </div>
+                                <input type="submit" class="btn btn-warning" value="Request Return">
+                            </form>
+                           </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

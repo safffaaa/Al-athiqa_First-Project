@@ -1,0 +1,137 @@
+
+<%- include('./head') %>
+
+
+
+                    <div class="row my-5 d-flex justify-content-center">
+                        <% if (messages.success) { %>
+                            <div class="container my-3" style="border-radius: 20px;">
+                                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center justify-content-between" role="alert">
+                                    <p class="fw-bold m-0"><strong>Message.!</strong> <%= messages.success %></p>
+                                    <button type="button" class="close btn btn-outline-success" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        <% } else if (messages.error) { %>
+                            <div class="container my-3" style="border-radius: 20px;">
+                                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center justify-content-between" role="alert">
+                                    <p class="fw-bold m-0"><strong>Message.!</strong> <%= messages.error %></p>
+                                    <button type="button" class="close btn btn-outline-danger" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        <% } %> 
+                        <div class="col-10 p-3 bg-white shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h1 class="fw-bold text-center text-secondary">Coupons</h1>
+                                <a href="/addCoupon" class="btn btn-success btn-md active btn-add-coupon" role="button" 
+                                    aria-pressed="true">Add Coupon</a>
+
+                            </div>
+                            <hr>  
+                            <% if (newCoupons.length>0) { %>
+                                <table class="table text-center shadow-sm">
+                                    <tr class="bg-dark text-white">
+                                        <th>Sl No</th>
+                                        <th>Coupon Code</th>
+                                        <th>Discount(%) </th>
+                                        <th>Start On</th>
+                                        <th>Ends At</th>
+                                        <th>Active</th>
+                                        <th colspan="3">Actions</th>
+                                    </tr>
+                                    <% newCoupons.forEach((x,index)=> { %>
+                                        <tr>
+                                            <td>
+                                                <%=index+1%>
+                                            </td>
+                                            <td>
+                                                <%= x.code %>
+                                            </td>
+                                            <td>
+                                                <%= x.discount %>
+                                            </td>
+                                            <td>
+                                                <%= new Date(x.valid_from).toLocaleString('en-US', {
+                                                    timeZone: 'Asia/Kolkata' }) %>
+                                            </td>
+                                            <td>
+                                                <%= new Date(x.valid_to).toLocaleString('en-US', {
+                                                    timeZone: 'Asia/Kolkata' }) %>
+                                            </td>
+                                            <td class="fw-bold">
+                                                <% if (x.status==="Active" ) { %>
+                                                    <p class="text-success">Active</p>
+
+                                                    <% } else {%>
+                                                        <p class="text-danger">Block</p>
+                                                        <%}%>
+                                            </td>
+                                            <td>
+                                                <% if (x.status==="Active" ) { %>
+                                                    <a href="/blockcoupon/<%=x._id%>"><button
+                                                            onclick="return confirm('Are you sure you want to  block the coupon')"
+                                                            class="btn btn-outline-danger ">Block</button></a>
+                                                    <% } else { %>
+                                                        <a href="/blockcoupon/<%=x._id%>"><button
+                                                                onclick="return confirm('Are you sure you want to  unblock the coupon')"
+                                                                class="btn btn-outline-success">Unblock</button></a>
+                                                        <%}%>
+                                            </td>
+                                            <td>
+                                                <% if (x.status==="Block" ) { %>
+                                                    <a href="/deletecoupon/<%= x._id %>">
+                                                        <button class="btn btn-outline-danger"
+                                                            onclick="return confirm('Are you sure to delete the coupon')">Delete</button>
+                                                    </a>
+                                                    <% } else { %>
+                                                        <button class="btn btn-outline-danger" disabled>Delete</button>
+                                                        <% } %>
+                                            </td>
+                                            <td>
+                                                <% if (x.status==="Block" ) { %>
+                                                    <a href="/editcoupon/<%=x._id%>"
+                                                        class="btn btn-outline-secondary">Edit</a>
+                                                    <% } else { %>
+                                                        <button class="btn btn-outline-secondary" disabled>Edit</button>
+                                                        <% } %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </table>
+
+                                <% } else { %>
+                                    <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Coupons Found</h3>
+
+                                    <%}%>
+
+                        </div>
+                    </div>
+
+                    
+        <% if (newCoupons.length > 0) { %>
+            <div class="d-flex justify-content-between m-auto w-50 align-items-center mt-3">
+                <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+                    <% if(currentPage === totalPages){%>
+                        <%=totalCount%>
+                    <%}else{%>
+                        <%= currentPage * perPage  %>
+                    <%}%>
+                    results from <%= totalCount %></p>
+                <ul class="pagination">
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+            <% newCoupons.forEach(product => { %>
+            <% }); %>
+        <% } else { %>
+            <p class="text-center">No Products Found</p>
+        <% } %>
+
+                

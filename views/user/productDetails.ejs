@@ -1,0 +1,93 @@
+<%- include('./header1') %>
+
+
+
+<div class="container">
+    <% if (messages.success) { %>
+        <div class="container my-3" style="border-radius: 20px;">
+            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center justify-content-between" role="alert">
+                <p class="fw-bold m-0"><strong>Message.!</strong> <%= messages.success %></p>
+                <button type="button" class="close btn btn-outline-danger" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    <% } else if (messages.error) { %>
+        <div class="container my-3" style="border-radius: 20px;">
+            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center justify-content-between" role="alert">
+                <p class="fw-bold m-0"><strong>Message.!</strong> <%= messages.error %></p>
+                <button type="button" class="close btn btn-outline-danger" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    <% } %> 
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7  py-5 my-5">
+            <div class="row">
+
+                <div class="col-2">
+                    <div class="col-12 my-1" > 
+                        <img class="thumbnail-image" src="/uploads/<%=products.images[0]%>"
+                            style="width: 100px; height: 100px;" alt="">
+                    </div>
+                    <div class="col-12 my-1">
+                        <img class="thumbnail-image" src="/uploads/<%=products.images[1]%>"
+                            style="width: 100px; height: 100px;" alt="">
+                    </div>
+                </div>
+                <div class="col-10"  >
+                    <div class="col-12" id="src"  >
+                        <img class="selected-image img-fluid" src="/uploads/<%=products.images[0]%>"
+                            style="width: auto; height: 450px;" alt="">                                    
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-5 py-5 my-5">
+    
+            <p class="fw-bold fs-3"><%= products.name%></p>
+
+            <p class="text-secondary small"><%= products.description%></p>
+
+            <p class="text-secondary ">Category: <%= products.category.name%></p>
+
+            <p class="text-secondary">Price: <span class="fw-bold text-dark">₹<%= products.price%></span></p>
+
+            <p class="text-secondary">stock:<%= products.stock %></p>
+            <br><br>
+            <div>
+                <a href="/addTocart/<%= products._id %>" class="btn btn-outline-dark me-3">Add to Cart</a>
+                <a href="/wishList/<%= products._id %>" class="btn btn-outline-dark mx-4">Add to Wishlist</a>
+
+
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    function zoom(e){
+    var zoomer = e.currentTarget;
+
+    e.offsetx ? offsetX = e.offsetX: offsetX = e.touches[0].pageX
+
+    e.offsety ? offsetY = e.offsety: offsetX = e.touches[0].pageX
+    
+    x = offsetx / zoomer.offsetWidth * 100
+
+    y = offsety / zoomer.offsetHeight * 100
+    
+    zoomer.style.backgroundPosition = x + '%' + y + '%';
+    
+    }
+    </script>
+
+<%- include('./foot') %>

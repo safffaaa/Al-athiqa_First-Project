@@ -1,0 +1,65 @@
+<%- include('./head') %>
+
+
+<div class="container">
+    <div class="nav w-100 d-flex justify-content-end">
+        <a href="/addCategory" class="btn btn-primary btn-md active btn-add-category" role="button"
+            aria-pressed="true">Add Category</a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Category Name</th>
+                <th scope="col">Category Image</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Remove</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            <% categories.forEach((category, index) => { %>
+            <tr>
+                <td><%= index + 1 %></td>
+                <td><%= category.name %></td>
+                <td><img width="50px" src="/uploads/<%= category.images[0] %>" alt=""></td>
+                <td><a href="/editCategory/<%= category._id %>" class="btn btn-primary">Edit</a></td>
+                <td><button onclick="removeCategory('<%= category._id %>')" class="btn btn-danger">Remove</button></td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function removeCategory(categoryId) {
+        console.log('Remove category with ID:', categoryId);
+
+        if (confirm('Are you sure you want to remove this category?')) {
+            // Send an AJAX request to delete the category
+            fetch(`/removeCategory/${categoryId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Category removed successfully');
+                    // Optionally, you can reload the page or update the UI after successfully removing the category
+                    location.reload(); // Reload the page
+                } else {
+                    console.error('Failed to remove category');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    }
+</script>
+
+
+
+
+<%- include('./foot') %>

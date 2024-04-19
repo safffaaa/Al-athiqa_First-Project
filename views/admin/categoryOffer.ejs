@@ -1,0 +1,99 @@
+<%- include('./head') %>
+
+
+
+        <% if (messages.success) { %>
+            <div class="alert alert-success">
+                <%= messages.success %>
+            </div>
+            <% }else if (messages.error){ %>
+                <div class="alert alert-danger">
+                    <%= messages.error %>
+                </div>
+                <%}%>
+
+
+                    <div class="row my-5 d-flex justify-content-center">
+                        <div class="col-10 p-3 bg-white shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h1 class="fw-bold text-center text-secondary">Category Offer</h1>
+                                <a class="btn btn-outline-primary" href="/addOffer">Add Offers</a>
+                            </div>
+                            <hr>
+
+
+                            <% if (sendoffer.length>0) { %>
+                           
+                                <table class="table text-center shadow-sm">
+                                    <tr class="bg-dark text-white">
+                                        <th>Sl No</th>
+                                        <th>Category Code</th>
+                                        <th>Discount(%) </th>
+                                        <th>Start On</th>
+                                        <th>Ends At</th>
+                                        <th>Active</th>
+                                        <th colspan="3">Actions</th>
+                                    </tr>
+                                    <% sendoffer.forEach((x,index) => { %>
+
+                                        <td>
+                                            <%=index+1 %>                                              
+                                        </td>
+                                        <td>
+                                            <%= x.categoryName %>                                          
+                                        </td>
+                                        <td>
+                                            <%= x.discount %>                                           
+                                        </td>
+                                        <td>
+                                            <%= new Date(x.valid_from).toLocaleString('en-US', {
+                                                timeZone: 'Asia/Kolkata' }) %>
+                                        </td>
+                                        <td>
+                                            <%= new Date(x.valid_to).toLocaleString('en-US', {
+                                                timeZone: 'Asia/Kolkata' }) %>
+                                          
+                                        </td>
+                                        <td class="fw-bold">
+                                            <% if (x.status==="Active" ) { %>
+                                                <p class="text-success">Active</p>
+
+                                                <% } else {%>
+                                                    <p class="text-danger">Block</p>
+                                                    <%}%>
+                                        </td>
+                                        <td>
+                                            <% if (x.status==="Active" ) { %>
+                                                <a href="/blockoffer/<%= x._id %>"><button
+                                                        onclick="return confirm('Are you sure you want to  block the offer')"
+                                                        class="btn btn-outline-danger ">Block</button></a>
+                                                <% } else { %>
+                                                    <a href="/blockoffer/<%= x._id %>"><button
+                                                            onclick="return confirm('Are you sure you want to  unblock the offer')"
+                                                            class="btn btn-outline-success">Unblock</button></a>
+                                                    <%}%>
+                                        </td>
+                                        <td>
+                                            <% if (x.status==="Block" ) { %>
+                                                <a href="/deleteoffer/<%= x._id %>">
+                                                    <button class="btn btn-outline-danger"
+                                                        onclick="return confirm('Are you sure to delete the coupon')">Delete</button>
+                                                </a>
+                                                <% } else { %>
+                                                    <button class="btn btn-outline-danger" disabled>Delete</button>
+                                                    <% } %>
+                                        </td>
+                                    </tr>
+                                     
+                                    <% }) %>
+                                        <tr>
+                                       
+                                      
+                                </table>
+                                <% } else { %>
+                                    <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Offers Found</h3>
+
+                                    <%}%>
+                        </div>
+                    </div>
+                   

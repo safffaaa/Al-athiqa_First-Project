@@ -1,0 +1,76 @@
+<%- include('./head') %>
+
+
+
+<div class="row d-flex justify-content-center">
+    <div class="col-7 mb-3">
+        <div class="card p-3 bg-light">
+            <h1 class="text-center">Edit Product</h1>
+            
+            <form action="/productEdit/<%= products._id %>" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="<%= products.name %>">
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select name="category" class="form-control" required>
+                        <option selected disabled><%= products.category.name %></option> 
+                        <% categories.forEach(function(cat){ %>
+                            <option value="<%= cat._id %>"><%= cat.name %></option>                                
+                        <% }) %>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" class="form-control"><%= products.description %></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="text" class="form-control" id="price" name="price" value="<%= products.price %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stocks" class="form-control" name="stock"  value="<%=products.stock%>"  required min="0" oninput="validateInput2(stocks)">
+                </div>
+
+                <div class="form-group">
+                    <label for="image1">Image 1</label>
+                    <input type="file" class="form-control" id="images1" name="images1" onchange="previewImage(this, 'previewImage1')">
+                    <img id="previewImage1" src="/uploads/<%= products.images[0] %>" style="width: auto; height: 50px;" alt="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="image2">Image 2</label>
+                    <input type="file" class="form-control" id="images2" name="images2" onchange="previewImage(this, 'previewImage2')">
+                    <img id="previewImage2" src="/uploads/<%= products.images[1] %>" style="width: auto; height: 50px;" alt="">
+                </div>
+                
+
+                <div class="d-flex justify-content-center py-2">
+                    <input type="submit" value="Add Item" class="btn btn-outline-dark">
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function previewImage(input, imgId) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById(imgId).src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+
+<%- include('./foot') %>
+

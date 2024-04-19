@@ -1,0 +1,96 @@
+<%- include('header') %>
+
+
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .otp-container {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .otp-input {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            text-align: center;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .submit-btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="otp-container">
+        <h2>Enter OTP</h2>
+        <p>We've sent a one-time password to your registered email.</p>
+        <% if (messages.success) { %>
+            <div class="alert alert-success">
+                <%= messages.success %>
+            </div>
+        <% }else if (messages.error){ %>
+          <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+        <%}%>
+   
+        <form method="post" action="" onsubmit="redirectToNextPage(); return false;">
+            <input name="getotp" type="text" class="form-control text-center w-50 mx-auto" maxlength="4" required>
+            <!-- <input name="b" type="text" class="otp-input" maxlength="1" required>
+            <input name="c" type="text" class="otp-input" maxlength="1" required>
+            <input name="d" type="text" class="otp-input" maxlength="1" required> -->
+
+            <br>
+
+            <button type="submit" class="submit-btn">Verify OTP</button>
+            <a method="post" href="/otpverify"></a>
+             <a href="/otpResend" class="submit-btn">ResendOTP</a>
+            </div>
+            <label for="email" class="form-group"></label>
+          
+        </form>
+    </div>
+
+    <!-- <script>
+        function redirectToNextPage() {
+            alert('OTP Verified! Redirecting to the next page.');
+            window.location.href = 'next_page.html';
+        }
+    </script> -->
+
+</body>
+</html>
+
+<%- include('footer') %>

@@ -1,0 +1,66 @@
+<%- include('./header1') %>
+
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 col-12">
+            <div class="card p-5 my-5">
+                <h4 class="text-center fw-bold">EDIT ADDRESS</h4>
+                <form action="/editAddress/<%=addresses.id  %>" method="post" >
+                    <% if (messages.success) { %>
+                        <div class="alert alert-success">
+                            <%= messages.success %>
+                        </div>
+                    <% }else if (messages.error){ %>
+                      <div class="alert alert-danger">
+                        <%= messages.error %>
+                    </div>
+                    <%}%>
+
+                    <div class="form-group py-2">
+                        <label for="Name" class="py-1">Name</label>
+                        <input type="text" placeholder="Name" id="name" value="<%= addresses.name %>" class="form-control" name="name" oninput="validateUserName()" required>
+                        <div id="nameCheck" class="text-danger"></div>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="House Name" class="py-1">House Name</label>
+                        <textarea placeholder="House Name" class="form-control" id="address" name="houseName" oninput="validateUserAddress()" required><%= addresses.addressLane %></textarea>
+                        <div id="addressCheck" class="text-danger"></div>
+                    </div>  
+                    <div class="form-group py-2">
+                        <label for="City" class="py-1">City</label>
+                        <input type="text" placeholder="City" id="city" value="<%= addresses.city %>" class="form-control" name="city" required oninput="validateUserCity()">
+                        <div id="cityCheck" class="text-danger"></div>
+
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="Pincode" class="py-1">Pincode</label>
+                        <input type="number" placeholder="Pincode" value="<%= addresses.pincode %>" class="form-control" id="pincode"  name="pincode" oninput="validatePincode() " required>
+                        <div id="pincodeMsg" class="text-danger"></div>
+                    </div> 
+                    <div class="form-group py-2">
+                        <label for="State" class="py-1">State</label>
+                        <input type="text" placeholder="State" value="<%= addresses.state %>" id="state" class="form-control" name="state" required oninput="validateUserState()">
+                        <div id="stateCheck" class="text-danger"></div>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="Mobile" class="py-1">Mobile</label>
+                        <input type="number" placeholder="Mobile Number" value="<%= addresses.mobile %>" id="mobile" class="form-control" name="mobile" oninput="validateMobileNumber() " required>
+                        <div id="mobileMsg" class="text-danger"></div>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="AltMobile" class="py-1">Alternative Mobile</label>
+                        <input type="number" placeholder="Alternative Mobile Number" value="<%= addresses.altMobile %>" id="altMobile" class="form-control" name="altMobile" oninput="validateAltMobileNumber() " required>
+                        <div id="altMobileMsg" class="text-danger"></div>
+                    </div>                        
+                   
+                    <div class="d-flex justify-content-end py-3">
+                        <a href="/userAddress" type="submit" value="Exit" class="btn btn-outline-danger">Exit</a>
+                        <input type="submit" value="Save Address" class="btn btn-outline-success mx-4">                            
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,53 @@
+<%- include('./head') %>
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7 py-5 my-5">
+            <div class="row">
+                <div class="col-2">
+                    <div class="col-12 my-1"> 
+                        <img class="thumbnail-image" src="/uploads/<%=products.images[0]%>" style="width: 100px; height: 100px;" alt="">
+                    </div>
+                    <div class="col-12 my-1">
+                        <img class="thumbnail-image" src="/uploads/<%=products.images[1]%>" style="width: 100px; height: 100px;" alt="">
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="col-12" id="selected-image-container">
+                        <img class="selected-image img-fluid" src="/uploads/<%=products.images[0]%>" style="width: auto; height: 450px;" alt="">                                    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5 py-5 my-5">
+            <p class="fw-bold fs-3"><%= products.name%></p>
+            <p class="text-secondary small"><%= products.description%></p>
+            <p class="text-secondary ">Category: <%= products.category.name%></p>
+            <p class="text-secondary">Price: <span class="fw-bold text-dark">₹<%= products.price%></span></p>
+            <p class="text-secondary">Stock: <%= products.stock %></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="path/to/ImageZoom.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".thumbnail-image").click(function () {
+            var newImageSrc = $(this).attr("src");
+            $(".selected-image").attr("src", newImageSrc);
+        });
+    });
+
+    // Initialize ImageZoom
+    var options = {
+        width: 400,
+        zoomWidth: 150,
+        offset: { vertical: 0, horizontal: 10 }
+    };        
+    new ImageZoom(document.getElementById("selected-image-container"), options);
+</script>
+
+<%- include('./foot') %>

@@ -1,0 +1,34 @@
+<% if (req.session.login) { %>
+    <%- include('./header') %>
+<% } else { %>
+    <%- include('./head') %>
+<% } %>
+
+
+
+   
+<div class="img"></div>
+
+<div id="category" class="container-fluid bg-light">
+    <h3 style="font-style: italic; font-family: fantasy">Category</h3>
+    <hr>
+    <div class="row mx-auto">
+        <% categories.forEach(category => { %>
+            <div class="col-md-4 col-12 text-center p-3 my-2 cat-div">
+                <a href="/product/<%= category._id %>"> 
+                    <% category.images.forEach(image => { %>
+                        <img src="/uploads/<%= image %>" alt="" class="cat-img">
+                    <% }) %>
+                    <h5><%= category.name %></h5>
+                </a>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+
+
+    <!-- <img src="assets/images/wal4.jpg" alt="homepagepic" class="img"> -->
+
+  
+<%- include('./foot') %>

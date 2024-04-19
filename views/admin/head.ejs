@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/admin/css/dashboard.css" />
+    <title>Al Athiqa</title>
+</head>
+
+<body>
+    <div class="container-fluid d-flex justify-content-between py-3" style="position: fixed;">
+        <h1 class="text-center m-0 p-0">Al Athiqa</h1>
+    </div>
+    <div class="container-fluid" style="position: absolute; top: 100px;">
+        <div class="row">
+
+            <!-- Left Nav -->
+
+            <div class="col-2" style="position: fixed; top: 10;">
+                <ul class="nav flex-column" id="sidebar">
+                    <li class="nav-item">
+                        <a href="/dashboard" class="list-group-item custom-list-item">
+                            <i class="fas fa-house me-2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/product" class="list-group-item custom-list-item">
+                            <i class="fas fa-bag-shopping me-2"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/category" class="list-group-item custom-list-item">
+                            <i class="fa fa-list-alt me-2 "></i>
+                            <span >Categories</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/customers" class="list-group-item custom-list-item">
+                            <i class="fas fa-users me-2"></i>
+                            <span>Customers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/orderlist" class="list-group-item custom-list-item">
+                            <i class="fas fa-cart-shopping me-2"></i>
+                            <span>Orders</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/returnOrders" class="list-group-item custom-list-item">
+                            <i class="fas fa-cart-shopping me-2"></i>
+                            <span>Returned Orders</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/adminCoupon" class="list-group-item custom-list-item">
+                            <i class="fas fa-list me-2"></i>
+                            <span>Coupon</span>
+                        </a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a href="/NewSales" class="list-group-item custom-list-item">
+                            <i class="fa fa-bars"></i> sales
+                        </a>
+                    </li> -->
+                    
+
+                    <a class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+                    data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                    aria-controls="collapseExample">
+                        <i class="fas fa-project-diagram me-2"></i>Offers
+                    </a>
+                    <div class="collapse mx-4 text" id="collapseExample">
+                        <div class="offerLink">
+                            <a href="/categoryOffer" class="btn btn-outline-secondary mb-2">Category Offers</a>
+                        </div>
+                    </div>
+                    <li class="nav-item">
+                        <a class="list-group-item custom-list-item" href="/adminLogout">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Body -->
+
+            <div class="col-10" style="position: relative; left: 200px;">
+
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var url = window.location.href;
+                        var sidebarLinks = document.querySelectorAll("#sidebar a");
+                        sidebarLinks.forEach(function (link) {
+                            if (link.href === url) {
+                                link.classList.add("active");
+                                link.classList.add("bg-secondary")
+                            }
+                        });
+                    });
+                </script>
+             
+                

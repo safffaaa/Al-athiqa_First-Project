@@ -1,0 +1,90 @@
+<%- include('./header1') %>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .card {
+            position: relative;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 200px;
+            height: auto;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .card-content {
+            padding: 15px;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            color: #dc3545;
+        }
+        .delete-btn:hover {
+            color: #bd2130;
+        }
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .no-wishlist {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 20px;
+            color: #dc3545;
+        }
+    </style>
+<body>
+    <div class="container">
+        <h3 class="fw-bold text-center text-secondary p-4">Wishlist</h3>
+    
+        <% if (showproduct && showproduct.products.length > 0) { %>
+            <div class="row">   
+                <% showproduct.products.forEach((product) => { %>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="card">
+                            <form action="/deletewish/<%= product._id %>" method="POST">
+                                <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete from wishlist?')">❌</button>
+                            </form>
+                            <a href="/ProductDetail/<%= product._id %>" class="text-decoration-none text-dark">
+                                <img src="/uploads/<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid">
+                                <div class="card-content">
+                                    <p class="product-name fw-bold"><%= product.name %></p>
+                                    <p class="product-price">Rs<%= product.price %></p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <h3 class="no-wishlist">No items in your wishlist</h3>
+        <% } %>
+    </div>
+
+
+    <!--key id = rzp_test_EXBOE0p2wmm8L8  -->
+    <!-- key secret = bAtLp91vw4Bs4XRMMMxsziCG -->
+

@@ -1,0 +1,30 @@
+<%- include('./header1') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <% if (newCoupons.length > 0) { %>
+            <% newCoupons.forEach((x, index) => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">
+                            Coupon <%= index + 1 %>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= x.code %></h5>
+                            <p class="card-text">Discount: <%= x.discount %>%</p>
+                            <p class="card-text">Start Date: <%= new Date(x.valid_from).toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata' }) %></p>
+                            <p class="card-text">End Date: <%= new Date(x.valid_to).toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata' }) %></p>
+                            <p class="card-text">Status: <% if (x.status === "Active") { %><span class="badge bg-success">Active</span><% } else { %><span class="badge bg-danger">Blocked</span><% } %></p>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="col-md-12">
+                <div class="alert alert-danger text-center" role="alert">
+                    No Coupons Found
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>

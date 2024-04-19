@@ -1,0 +1,89 @@
+<%- include('./head') %>
+
+        <div class="d-flex justify-content-between">
+            <h3>Products</h3>
+            <a href="/addproduct" class="btn btn-primary btn-md active" role="button" aria-pressed="true">Add
+                Products</a>
+        </div>
+
+        <table class="table">
+
+                <tr>
+                    <th scope="col">NO</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">IMAGE</th>
+                    <th scope="col">CATEGORY</th>
+                    <th scope="col">PRICE</th>
+                    <th class="col">STOCK</th>
+                    <th scope="col">EDIT</th>
+                    <th scope="col">STATUS</th>
+                </tr>
+
+                <% products.forEach((x,index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><a href="product-detail/<%= x._id %>" class="text-decoration-none text-dark"><%= x.name %></a></td>
+                        <td><img src="/uploads/<%= x.images[1] %>" alt="" style="width: auto; height: 70px;"></td>
+                        <td><%= x.category ? x.category.name : 'No Category' %></td> 
+                        <td>₹<%= x.price %></td>
+                        <td><%= x.stock %></td>
+                        <td><a href="/productEdit/<%= x._id %>" class="btn btn-primary">Edit</a></td>
+                        <td><button onclick="removeProduct('<%= x._id %>')" class="btn btn-danger">Remove</button></td>
+                    </tr>
+                <% }); %>
+                
+        </table>
+
+        <script>
+            function removeProduct(productId) {
+                console.log('Remove product with ID:', productId);
+        
+                if (confirm('Are you sure you want to remove this product?')) {
+                    fetch(`/product-delete/${productId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('product removed successfully');
+                            // Optionally, you can reload the page or update the UI after successfully removing the category
+                            location.reload(); // Reload the page
+                        } else {
+                            console.error('Failed to remove product');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            }
+        </script>
+        
+
+        <% if (products.length > 0) { %>
+            <div class="d-flex justify-content-between m-auto w-50 align-items-center mt-3">
+                <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+                    <% if(currentPage === totalPages){%>
+                        <%=totalCount%>
+                    <%}else{%>
+                        <%= currentPage * perPage  %>
+                    <%}%>
+                    results from <%= totalCount %></p>
+                <ul class="pagination">
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+            <% products.forEach(product => { %>
+            <% }); %>
+        <% } else { %>
+            <p class="text-center">No Products Found</p>
+        <% } %>
+        
+        
+<%- include('./foot') %>

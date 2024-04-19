@@ -1,0 +1,120 @@
+<script>
+    $(document).ready(function () {
+        $('#onlinePaymentBtn').hide();
+        $('select[name="payment"]').change(function () {
+            var selectedPaymentMethod = $(this).val();
+            if (selectedPaymentMethod === 'onlinePayment') {
+                $('#confirmCheckoutBtn').hide();
+                $('#onlinePaymentBtn').show();
+            } else {
+                $('#onlinePaymentBtn').hide();
+                $('#confirmCheckoutBtn').show();
+            }
+        });
+        $('#confirmCheckoutBtn').click(function () {
+            makePayment();
+        });
+    });
+
+    function makePayment() {
+        var addressID = $('select[name="address"]').val();
+        var paymentMethod = $('select[name="payment"]').val();
+        $.ajax({
+            url: '/createOrder',
+            type: 'get',
+            data: {
+                addressID: addressID,
+                paymentMethod: paymentMethod
+            },
+            contentType: 'application/json',
+            success: function (response) {
+                const order = response.order
+                const id = order.id;
+                const total = order.amount;
+                var options = {
+                    key: 'rzp_test_BqCx3BSCZMQofR',
+                    amount: total,
+                    currency: 'INR',
+                    name: 'AL-Athiqa',
+                    description: 'Test Transaction',
+                    image: '',
+                    order_id: id,
+                    handler: function (response) {
+                        alert(response.razorpay_payment_id);
+                        alert(response.razorpay_order_id);
+                        verifyPayment(response, order)
+                    },
+                    theme: {
+                        color: '#3c3c3c'
+                    }
+                }
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                alert('Error creating order. Please try again.');
+            }
+        });
+
+    }
+    function verifyPayment(payment, order) {
+        console.log('now in verifyPayment ', payment)
+        $.ajax({
+            url: '/verifyPayment',
+            data: {
+                payment,
+                order,
+                // orderId
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.success) {
+                    createOrder();
+                    console.log('response got')
+                    //  location.href = ''
+                } else {
+                    console.log('response not get');
+                    location.href = ''
+                }
+            }
+        })
+    }
+
+    function createOrder() {
+        var addressID = $('select[name="address"]').val();
+        var paymentMethod = $('select[name="payment"]').val();
+        $.ajax({
+            url: '/razPayment',
+            method: 'POST',
+            data: {
+                addressID: addressID,
+                paymentMethod: paymentMethod
+            },
+            success: function (response) {
+                location.href = '/dashboard'
+                orderId = response.orderId
+            }
+        });
+    }    
+</script>
+
+
+
+
+<!-- await categoryoffer.save()
+const newcategory=await categorydb.findOne({name:name}) 
+const categoryId=newcategory._id 
+const updateproduct=await productdb.find({category:categoryId})
+const newdiscount=(req.body.discount)/100
+for(x of updateproduct){
+    const dbofferprice=x.offerprice
+    x.offerprice =(x.price-x.discount) -(x.price-x.discount)*newdiscount
+    const updateoffer=x.offerprice                   
+    const updateofferprice = await productdb.findByIdAndUpdate(
+        x._id,
+        { $set: { offerprice: updateoffer, offerdiscount: req.body.discount } },
+        { new: true }
+      );                      
+}
+res.redirect("/addcategoryOffer") -->

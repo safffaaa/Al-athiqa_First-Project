@@ -1,0 +1,319 @@
+<%- include('./header1') %>
+
+    <div class="container-fluid">
+        <% if (messages.success) { %>
+            <div class="container my-3" style="border-radius: 20px;">
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center justify-content-between"
+                    role="alert">
+                    <p class="fw-bold m-0"><strong>Message.!</strong>
+                        <%= messages.success %>
+                    </p>
+                    <button type="button" class="close btn btn-outline-success" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        <% } else if (messages.error) { %>
+            <div class="container my-3" style="border-radius: 20px;">
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center justify-content-between"
+                    role="alert">
+                    <p class="fw-bold m-0"><strong>Message.!</strong>
+                        <%= messages.error %>
+                    </p>
+                    <button type="button" class="close btn btn-outline-danger" data-dismiss="alert"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        <% } %>
+        <div class="row p-1">
+            <div class="col-md-8 p-3">
+
+                <form method="post" action="/checkoutpage">
+                    <h3 class="fw-bold text-secondary">Checkout Page</h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12 my-2">
+                            <div class="p-3 bg-white rounded shadow-sm">
+                                <h4 class="fw-bold">Shipping Information</h4>
+                                <hr>
+                                <div class="row p-2">
+                                    <div class="form-group">
+                                        <select name="address" class="form-select py-2" required>
+                                            <% addaddress.forEach((x)=> { %>
+                                                <option value="<%= x._id %>">
+                                                    <%= x.name %>,<br>
+                                                    <%= x.addressLane %>,<br>
+                                                    <%= x.city %>, <%= x.state %>,<br>
+                                                    <%= x.pincode %>,<br>
+                                                    <%= x.mobile %>, <%= x.altMobile %>
+                                                </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#addAddressModal">Add Address</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 my-2">
+                            <div class="p-3 bg-white rounded shadow-sm">
+                                <h4 class="fw-bold">Payment Information</h4>
+                                <hr>
+                                <div class="row p-2">
+                                    <select name="payment" class="form-select py-2">
+                                        <option class="text-primary" selected disabled>Select the
+                                            Payment Method</option>
+                                        <option value="COD">Cash On Delivery</option>
+                                        <option value="onlinePayment">Online Payment</option>
+                                        <option value="walletPayment">Wallet Payment</option>
+                                    </select>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <input type="submit" class="btn btn-outline-primary" id="confirmCheckoutBtn" style="display: none;" value="Confirm Checkout">
+                                    <button class="btn btn-outline-primary" id="rzp-button1" style="display: none;" type="button">Online Payment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4 p-3">
+                <div class="card p-3">
+                    <h3 class="text-center">SUMMARY</h3>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <p>Total Amount</p>
+                        <p>₹<%= grandTotal %></p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p>Total Items</p>
+                        <p><%= quantity %></p>
+                    </div>
+                    <p class="text-dark small" id="coupon-text" style="cursor: pointer;">Have a Coupon ?</p>
+                    <div id="coupon" style="display: none;">
+                        <form action="applyCoupon" method="post">
+                            <% if (!newCoupons || newCoupons.length < 0) { %>
+                                <p class="text-danger">No coupons available, Better luck next time</p>
+                            <% } else if (appliedCoupon) { %>
+                                <p class="text-success">Coupon applied successfully</p>
+                            <% } else { %>
+                                <select id="test1" name="coupon" class="form-select">
+                                    <option disabled selected>Select a coupon.!</option>
+                                    <% newCoupons.forEach((x)=> { %>
+                                        <% if (x.status === "Active") { %>
+                                            <option value="<%= x._id %>"><%= x.code %></option>
+                                        <% } %>
+                                    <% }) %>
+                                </select>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-outline-dark my-2">Apply Coupon</button>
+                                </div>
+                            <% } %>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <p>Delivery Charge</p>
+                        <% if (total < 4000) { %>
+                            <p class="text-danger fw-bold">₹40</p>
+                        <% } else { %>
+                            <p class="text-success fw-bold">Free</p>
+                        <% } %>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p>Grand Total</p>
+                        <% if (total < 4000) { %>
+                            <p class="text-success fw-bold" id="totalPrice">₹<%= total+40 %></p>
+                        <% } else { %>
+                            <p class="text-success fw-bold" id="totalPrice">₹<%= total %></p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+            
+        </div>
+    </div>
+
+<%- include('./foot') %>
+
+    <!-- Modal for Add Address -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addAddressForm" method="post" action="/addressAddCheckout">
+                        <!-- Address input fields go here -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">House Name</label>
+                            <input type="text" class="form-control" name="houseName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">City</label>
+                            <input type="text" class="form-control" name="city" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">state</label>
+                            <input type="text" class="form-control" name="state" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">pin code</label>
+                            <input type="number" class="form-control" name="pincode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Mobile No</label>
+                            <input type="number" class="form-control" name="mobile" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Alt Mobile No</label>
+                            <input type="number" class="form-control" name="altMobile" required>
+
+                            <div class="d-flex justify-content-end p-3">
+                                <button type="submit" class="btn btn-success">submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    var selectCoupon = document.getElementById('coupon-text');
+    var coupon = document.getElementById('coupon');
+
+    selectCoupon.addEventListener('click', function () {
+        selectCoupon.style.display = 'none';
+        coupon.style.display = 'block';
+    })
+
+    $(document).ready(function () {
+        $('#confirmCheckoutBtn').hide();
+        $('select[name="payment"]').change(function () {
+            var selectedPaymentMethod = $(this).val();
+            if (selectedPaymentMethod === 'onlinePayment') {
+                $('#confirmCheckoutBtn').hide();
+                $('#rzp-button1').show();
+            } else {
+                $('#rzp-button1').hide();
+                $('#confirmCheckoutBtn').show();
+            }
+        });
+    });
+</script>
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+document.getElementById('rzp-button1').onclick = function() {
+    fetch('/create_payment', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        var options = {
+            key: 'rzp_test_CMXKo79M6lqVba',
+            amount: data.order.amount + 40, 
+            currency: data.currency,
+            name: 'Al Athiqa',
+            description: 'Test Payment',
+            order_id: data.order_id,
+            handler: function(response) {
+                verifyPayment(response);
+            },
+            prefill: {
+                name: data.user.name,
+                email: data.user.email
+            },
+            theme: {
+                color: '#3399cc'
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response){
+            payment_failed()
+        });
+        rzp.open();
+    })
+    .catch(error => console.error('Error:', error));
+};
+
+
+const payment_failed = () => {
+    var addressID = $('select[name="address"]').val();
+
+    $.ajax({
+        url: '/payment_failed',
+        method: 'POST',
+        data: {
+            addressID: addressID,
+        },
+        success: function (response) {
+            location.href = '/orderSuccess'
+            console.log(response);
+        }
+    });
+}
+
+function verifyPayment(payment) {
+    console.log('now in verifyPayment ', payment)
+    $.ajax({
+        url: '/verify_Payment',
+        data: {
+            payment,
+        },
+        method: 'post',
+        success: (response) => {
+            if (response.success) {
+                createOrder();
+                console.log('response got')
+            } else {
+                console.log('response not get');
+                location.href = ''
+            }
+        },
+    })
+}
+
+
+function createOrder() {
+    console.log("createOrder");
+    var addressID = $('select[name="address"]').val();
+
+    $.ajax({
+        url: '/create_order',
+        method: 'POST',
+        data: {
+            addressID: addressID,
+        },
+        success: function (response) {
+            location.href = '/orderSuccess'
+            orderId = response.orderId
+            console.log(response);
+        }
+    });
+}
+
+
+</script>

@@ -1,0 +1,127 @@
+<%- include('./header1') %>
+
+<div class="container product-list" style="top: 100px;">
+    
+    <div class="alert alert-danger" id="error_message" style="display: none;"></div>
+    <div class="row">
+
+        <div class="col-md-8">
+            <% if (carts && carts.items.length > 0) { %>
+                <% carts.items.forEach(item => { %>
+                    <div class="row my-1 p-2" style="box-shadow: 0 0 2px black;">
+
+                        <div class="img-div col-3 text-center">
+                            <img src="/uploads/<%= item.productId.images[0] %>" class="img-fluid" style="height: 100px;" alt="">
+                        </div>
+                        <div class="cart-detail col-9 d-flex justify-content-between">
+                            <div class="">
+                                <p class="fs-5 fw-bold">
+                                    <%= item.productId.name %>
+                                </p>
+        
+                                <div class="d-flex align-items-center" style="border: 1px solid rgba(0, 0, 0, 0.304); width: fit-content; border-radius: 5px;">
+                                    <button type="button" class="btn btn-secondary" onclick="updateButton('decrement', '<%= item.productId._id %>')">-</button>
+                                    <p class="m-0 px-2" id="quantity"><%= item.quantity %></p>
+                                    <button type="button" class="btn btn-secondary" onclick="updateButton('increment', '<%= item.productId._id %>')">+</button>
+                                </div>
+
+                            </div>
+                          
+                            <div class="">
+                                <p class="fs-5 fw-bold">₹<%= item.productId.price * item.quantity %></p>
+                                <a href="/removeCartitems/<%= item.productId._id %>" class="btn btn-outline-danger" onclick="return confirm('Are you sure to delete the item')">Remove</a>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-12 alert alert-danger p-3">
+                    <p>Cart is empty..!</p>
+                </div>
+            <% } %>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h3 class="text-center">Cart Summary</h3>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <p>Total Amount</p>
+                    <p>Rs ₹<%= totalAmount %></p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p>Total Items</p>
+                    <p><%= totalQuantity %></p>
+                </div>
+                <hr>
+                
+                <div class="d-flex justify-content-between">
+                    <p>Delivery Fee</p>
+                    <% if (totalAmount < 4000) { %>
+                        <div class="d-flex justify-content-between text-danger"><p>Rs ₹40</p>
+                    <% } else { %>
+                        <div class="d-flex justify-content-between text-success"><p>Free</p>
+                    <% } %>
+                </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <p>Grand Total</p>
+                    <% if (totalAmount < 4000) { %>
+                        <p class="text-success fw-bold" id="totalPrice">₹<%= totalAmount+40 %></p>
+                    <% } else { %>
+                        <p class="text-success fw-bold" id="totalPrice">₹<%= totalAmount %></p>
+                    <% } %>
+                </div>
+
+                <div class="text-center">
+                    <a href="/checkoutpage" class="btn btn-success form-control">Checkout</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function updateButton(action, product_ID) {
+        var quantity = parseInt(document.getElementById('quantity').innerText)
+        var errorDiv = document.getElementById('error_message')
+        if (action === 'increment') {
+            quantity ++;
+        }
+        if(action === 'decrement' && quantity > 1) {
+            quantity --;
+        }
+        console.log(quantity, product_ID);
+
+        fetch('/updateQuantity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ quantity: quantity, productId: product_ID }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('quantity').innerText = quantity
+                errorDiv.style.display = 'none'
+            }
+            else{
+                errorDiv.style.display = 'block'
+                errorDiv.innerHTML = "Product out of stock"
+
+                setTimeout(function() {
+                    errorDiv.style.display = 'none';
+                }, 1500);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    }
+</script>
+
+<%- include('./foot') %>
+

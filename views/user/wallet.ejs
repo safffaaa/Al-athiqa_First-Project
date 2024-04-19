@@ -1,0 +1,79 @@
+<%- include('./header1') %>
+
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+<% } else if (messages.error) { %>
+    <div class="alert alert-danger">
+        <%= messages.error %>
+    </div>
+<% } %>
+
+<!-- .............................. -->
+<div class="container-fluid p-2">
+    <div class="row m-0" style="min-height: 65vh;">
+        <div class="col-10 m-auto bg-white rounded shadow-sm p-3">
+            <h3 class="fw-bold text-center">Wallet</h3>
+            <hr>
+            <div class="p-3 shadow-sm">
+                <% if (myWallet && myWallet.length > 0) { %>
+                    <table class="table table-striped">
+                        <tr>    
+                            <th>Sl No</th>
+                            <th>Transaction ID</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-right">Credit/Debit</th>
+                            <th class="text-right">Amount</th>
+                        </tr>
+                        <% myWallet.forEach((x, index) => { %>
+                            <tr>
+                                <th><%= index + 1 %></th>
+                                <th>
+                                    <p>
+                                        <% if (x) { %>
+                                            <%= x._id %>
+                                        <% } else { %>
+                                            N/A
+                                        <% } %>
+                                    </p>
+                                </th>
+                                <% if (x.status === "Credit") { %>
+                                    <th class="text-center">
+                                        <p>
+                                            <%= new Date(x.orders.returnDate).toLocaleDateString() %>
+                                        </p>
+                                    </th>
+                                <% } else if (x.status === "Debit") { %>
+                                    <th class="text-center">
+                                        <p>
+                                            <%= new Date(x.orders.orderDate).toLocaleDateString() %>
+                                        </p>
+                                    </th>
+                                <% } else { %>
+                                    <th class="text-center">
+                                        <p>N/A</p>
+                                    </th>
+                                <% } %>
+                                <th class="text-right text-<%= x.status === "Credit" ? "success" : "danger" %>">
+                                    <p><%= x.status %></p>
+                                </th>
+                                <th class="text-right text-<%= x.status === "Credit" ? "success" : "danger" %>">
+                                    <p>₹ <%= x.totalAmount %></p>
+                                </th>
+                            </tr>
+                        <% }) %>
+                        <!-- Remaining code -->
+                    </table>
+                    <div class="text-end">
+                        <p class="fw-bold fs-3">Total Balance: <span class="text-success">₹ <%= walletTotal %></span></p>
+                    </div>
+                <% } else { %>
+                    <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No wallet information found</h3>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('./foot') %>

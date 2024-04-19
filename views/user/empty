@@ -1,0 +1,81 @@
+Order Detailed View Cancel Button
+<% if (myOrder.status==='Delivered' ) { %>
+    <td colspan="2"><a href="/returnOrder/<%= myOrder._id %>" class="btn btn-outline-danger">Return</a></td>
+<% } else if (myOrder.status==='Cancelled' ) { %>
+    <td colspan="2" class="text-danger fw-bold">Cancelled</td>
+<% } else if (myOrder.status==='Return Pending' || myOrder.status==='Returned' ) { %>
+    <td colspan="2"><button disabled class="btn btn-outline-danger">Return</button></td>
+<% } else { %>
+    <td colspan="2"><a href="/cancelOrder/<%= myOrder._id %>" class="btn btn-outline-secondary">Cancel</a>
+    </td>
+<% } %>
+
+
+
+
+async function updateSalesGraph(timeInterval) {
+    const salesData = await fetchSalesData(timeInterval);
+    const Amount = document.getElementById("salesGraphAmount").getContext("2d");
+    const Count = document.getElementById("salesGraphCount").getContext("2d");
+
+    if (window.myChart1) {
+        window.myChart1.destroy();
+    }
+    if (window.myChart2) {
+        window.myChart2.destroy();
+    }
+
+    window.myChart1 = new Chart(Amount, {
+        type: "line",
+        data: {
+            labels: salesData.labelsByCount,
+            datasets: [{
+                label: "Sales by orders",
+                data: salesData.dataByCount,
+                borderColor: "green",
+                fill: false
+            }]
+        },
+        options: {
+            legend: { display: false },
+            elements: {
+                line: {
+                    tension: 0.4
+                }
+            },
+            hover: {
+                mode: 'none' 
+                }
+        }
+    });
+
+    const barColors = ["red", "green", "blue", "orange", "brown"];
+    window.myChart2 = new Chart(Count, {
+        type: "bar",
+        data: {
+            labels: salesData.labelsByAmount,
+            datasets: [{
+                label: "Sales by Amount",
+                data: salesData.dataByAmount,
+                backgroundColor: barColors,
+                borderColor: "white",
+                borderWidth: 3,
+            }],
+        },
+        options: {
+            scales: {
+                x: [{
+                    grid: {
+                        display: true
+                    }
+                }],
+                y: [{
+                    beginAtZero: true,
+                    maxTicksLimit: 5
+                }]
+            },
+            hover: { mode: null } 
+        },
+    });
+}
+updateSalesGraph();
