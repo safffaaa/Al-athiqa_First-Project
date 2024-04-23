@@ -13,7 +13,7 @@ module.exports={
             const totalCount = await Coupon.countDocuments();
             const totalPages = Math.ceil(totalCount / perPage);
             const newCoupons = await Coupon.find({}).sort({ discount: 1 }).skip(skip).limit(perPage);
-            res.render("./admin/admincoupon", {
+            res.render("./admin/adminCoupon", {
                 newCoupons ,
                 currentPage: page,
                 perPage,

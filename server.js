@@ -9,6 +9,7 @@ const db=require("./config/db")
 const upload=require('./middleware/multer')
 const flash=require('express-flash')
 const { generateSalesPDF } = require('./utility/downloadSalesReport')
+const sharp=require("sharp")
 
 
 const app=express()

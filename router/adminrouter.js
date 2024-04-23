@@ -82,7 +82,7 @@ router.route('/product-delete/:id')
 
 router.route('/addproduct')
     .get(verifyAdmin,productsController.addproducts)
-    .post(uploadMulter.fields([{ name: 'images1', maxCount: 1 }, { name: 'images2', maxCount: 1 }]), productsController.addproductPost)
+    .post(uploadMulter.any(), productsController.addproductPost)
 
 
 

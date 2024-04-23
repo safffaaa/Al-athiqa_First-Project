@@ -1,5 +1,9 @@
 const product = require('../models/productSchema')
 const category=require('../models/categorySchema')
+const sharp=require("sharp")
+const path = require('path');
+
+
 // const { category } = require('./category')
 
 module.exports={
@@ -63,10 +67,17 @@ module.exports={
 
             console.log(newcategory);
         
-            for (let i = 1; i <= 2; i++) {
-                const fieldName = `images${i}`;
-                if (req.files[fieldName] && req.files[fieldName][0]) {
-                    images.push(req.files[fieldName][0].filename);
+            for (let file of req.files) {
+                try {
+                    const croppedImageBuffer = await sharp(file.path) 
+                        .resize({ width: 200, height: 200, fit: 'cover' })
+                        .toBuffer();
+                    const filename = `${file.fieldname}-${Date.now()}.jpg`; 
+                    images.push(filename);
+                    await sharp(croppedImageBuffer).toFile(path.join(__dirname, '..', 'public', 'uploads', filename));
+                } catch (sharpError) {
+                    console.error('Sharp error:', sharpError);
+                    continue;
                 }
             }
             console.log(images);

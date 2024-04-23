@@ -5,12 +5,12 @@
         <div class="col-md-7 py-5 my-5">
             <div class="row">
                 <div class="col-2">
-                    <div class="col-12 my-1"> 
-                        <img class="thumbnail-image" src="/uploads/<%=products.images[0]%>" style="width: 100px; height: 100px;" alt="">
-                    </div>
-                    <div class="col-12 my-1">
-                        <img class="thumbnail-image" src="/uploads/<%=products.images[1]%>" style="width: 100px; height: 100px;" alt="">
-                    </div>
+                    <% for (let i = 0; i < products.images.length; i++) { %>
+                        <div class="col-12 my-1"> 
+                            <img class="thumbnail-image" src="/uploads/<%= products.images[i] %>" style="width: 100px; height: 100px;" alt="">
+                        </div>
+                    <% } %>
+                    
                 </div>
                 <div class="col-10">
                     <div class="col-12" id="selected-image-container">
