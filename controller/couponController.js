@@ -13,6 +13,7 @@ module.exports={
             const totalCount = await Coupon.countDocuments();
             const totalPages = Math.ceil(totalCount / perPage);
             const newCoupons = await Coupon.find({}).sort({ discount: 1 }).skip(skip).limit(perPage);
+            console.log("newww");
             res.render("./admin/adminCoupon", {
                 newCoupons ,
                 currentPage: page,
