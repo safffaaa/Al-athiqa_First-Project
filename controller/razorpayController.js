@@ -229,14 +229,15 @@ module.exports = {
 
         const { orderId } = req.body
         const orderInfo = await order.findById(orderId)
-    
+        console.log(orderId, "------>", orderInfo);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        let total = 0
-        if (orderInfo.totalAmount < 4000){
-            total = orderInfo.totalAmount + 40
+        let total = orderInfo.totalAmount
+        if (total < 4000){
+            total += 40
         }
+        console.log(total);
     
         try {
             const order = await razorpay.orders.create({
@@ -245,6 +246,7 @@ module.exports = {
                 receipt: 'order_rcptid_11',
                 payment_capture: 1
             });
+            console.log(order);
             res.json({ order, user, order_id: order.id });
         } catch (error) {
             res.status(500).json({ error: error.message });

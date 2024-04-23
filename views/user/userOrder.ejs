@@ -46,7 +46,12 @@
                                                  <% } else { %>
                                                     <%= order.paymentStatus %>
                                                 <% } %></p>
-                                                <a href="/userorderdetails/<%= order._id %>" class="btn btn-success">View</a>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <a href="/userorderdetails/<%= order._id %>" class="btn btn-success">View</a>
+                                                    <% if (order.paymentStatus === 'Payment Failed') { %>
+                                                        <button id="rzp-button1" data-order-id="<%= order._id %>" class="btn btn-outline-danger">Retry payment</button>
+                                                    <% } %>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -62,6 +67,95 @@
         </div>
     </div>
 
+ 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    jQuery(document).ready(function($) {
+        document.getElementById('rzp-button1').onclick = function() {
 
+            const orderId = this.getAttribute('data-order-id')
+            console.log(orderId);
+            fetch('/repay', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orderId: orderId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var options = {
+                    key: 'rzp_test_CMXKo79M6lqVba',
+                    amount: data.order.amount, 
+                    currency: data.currency,
+                    name: 'Al Athiqa',
+                    description: 'Test Payment',
+                    order_id: data.order_id,
+                    handler: function(response) {
+                        verifyPayment(response, orderId);
+                    },
+                    prefill: {
+                        name: data.user.name,
+                        email: data.user.email
+                    },
+                    theme: {
+                        color: '#3399cc'
+                    }
+                };
+    
+                var rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (response){
+                    window.alert("Payment Again Failed")
+                    window.location.reload()
+                });
+                rzp.open();
+            })
+            .catch(error => console.error('Error:', error));
+        };
+    
+        function verifyPayment(payment, orderId) {
+            $.ajax({
+                url: '/verify_Payment',
+                data: {
+                    payment,
+                },
+                method: 'post',
+                success: (response) => {
+                    if (response.success) {
+                        payment_success(orderId);
+                        console.log('response got')
+                    } else {
+                        console.log('response not get');
+                        location.href = ''
+                    }
+                },
+            })
+        }
+    
+        function payment_success(orderId) {
+            console.log("payment success", orderId);
+    
+            $.ajax({
+                url: '/repay_success',
+                method: 'POST',
+                data: {
+                    orderId: orderId,
+                },
+                success: function (response) {
+                    location.reload()
+                    console.log(response);
+                }
+            });
+        }
+    });
+        
+      </script>
+    
+    
+    
+    <%- include('./foot') %>
 
 
